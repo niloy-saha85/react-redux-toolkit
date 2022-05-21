@@ -22,7 +22,8 @@ const Courses = () => {
   const [frmError, setFrmError] = useState(false);
 
   useEffect(() => {
-    dispatch(getCourses());
+    // dispatch(getCourses());
+    dispatch({type: 'GET_COURSES'});
   }, [dispatch]);
 
   const handleChange = ({ target: { name, value } }) => {
