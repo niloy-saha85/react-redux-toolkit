@@ -1,1 +1,1 @@
-# React App with Redux Toolkit and Thunk
+# React App with Redux Toolkit and React Saga
