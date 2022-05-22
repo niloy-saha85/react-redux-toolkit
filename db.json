@@ -27,34 +27,40 @@
   ],
   "enquiry": [
     {
-      "name": "hello",
-      "email": "hello",
-      "comment": "hello",
+      "name": "new",
+      "email": "new",
+      "comment": "new",
       "id": 1
     },
     {
-      "name": "j",
-      "email": "j",
-      "comment": "kj",
+      "name": "hello",
+      "email": "hello",
+      "comment": "hello",
       "id": 2
     },
     {
-      "name": "hey",
-      "email": "hey",
-      "comment": "hey",
+      "name": "yay",
+      "email": "yay",
+      "comment": "yay",
       "id": 3
     },
     {
-      "name": "again",
-      "email": "again",
-      "comment": "again",
+      "name": "yt",
+      "email": "yt",
+      "comment": "yt",
       "id": 4
     },
     {
-      "name": "here ",
-      "email": "here",
-      "comment": "here",
+      "name": "fd",
+      "email": "fd",
+      "comment": "fd",
       "id": 5
+    },
+    {
+      "name": "qw",
+      "email": "qw",
+      "comment": "qw",
+      "id": 6
     }
   ]
 }

@@ -1,58 +1,61 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getCourses, selectCourses } from "../reducers/course";
-import { addEnquiry } from "../reducers/enquiry";
+import { selectCourses, selectCoursesStatus } from "../reducers/course";
+import {
+  selectEnquiryFormSubmitted,
+  setFormSubmitted,
+} from "../reducers/enquiry";
+import { ADD_ENQUIRY, GET_COURSES } from "../saga/types";
 
-const postEnquiry = async (data) => {
-  const resp = await fetch("http://localhost:5000/enquiry", {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  return await resp.json();
-};
+let initial = true;
 
 const Courses = () => {
   const courses = useSelector(selectCourses);
+  const coursesStatus = useSelector(selectCoursesStatus);
+  const coursesFormSubmitted = useSelector(selectEnquiryFormSubmitted);
   const dispatch = useDispatch();
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [inputs, setInputs] = useState({});
   const [frmError, setFrmError] = useState(false);
 
   useEffect(() => {
-    // dispatch(getCourses());
-    dispatch({type: 'GET_COURSES'});
+    if (initial) {
+      initial = false;
+      dispatch({ type: GET_COURSES });
+    }
   }, [dispatch]);
+
+  useEffect(() => {
+    if (coursesFormSubmitted) {
+      reset();
+    }
+  }, [coursesFormSubmitted]);
 
   const handleChange = ({ target: { name, value } }) => {
     setFrmError("");
     setInputs((prev) => ({ ...prev, [name]: value }));
   };
 
+  const reset = () => {
+    setInputs({});
+    setSelectedCourse(null);
+    setFrmError("");
+  };
+
   const enquirySubmit = async (e) => {
     e.preventDefault();
+    dispatch(setFormSubmitted(false));
     setFrmError("");
     if (!inputs.name || !inputs.email || !inputs.comment)
       return setFrmError("Please enter all details");
-    try {
-      await postEnquiry(inputs);
-      dispatch(addEnquiry(inputs));
-      setTimeout(() => {
-        setInputs({});
-        setSelectedCourse(null);
-        setFrmError("");
-      }, 3000);
-    } catch (error) {
-      console.error(error);
-      setFrmError("Error posting new enquiry");
-    }
+    dispatch({ type: ADD_ENQUIRY, payload: inputs });
   };
 
   return (
     <div className='container mt-3'>
       <div className='row'>
+        {coursesStatus.loading && <div>Loading...</div>}
+        {coursesStatus.error && <div>{coursesStatus.errorMsg}</div>}
         {courses &&
           courses.map((e) => {
             return (

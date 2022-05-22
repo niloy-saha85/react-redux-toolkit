@@ -1,8 +1,8 @@
 import { all, call, spawn } from "redux-saga/effects";
-import { fetchCourses } from "./watchers";
+import { fetchCourses, fetchEnquiry, postEnquiry } from "./watchers";
 
 function* rootSaga() {
-  const sagas = [fetchCourses];
+  const sagas = [fetchCourses, fetchEnquiry, postEnquiry];
 
   yield all(
     sagas.map((saga) =>

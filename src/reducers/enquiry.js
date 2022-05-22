@@ -2,6 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   enquiry: [],
+  formSubmitted: false,
+  status: {
+    loading: false,
+    error: false,
+    errorMsg: null,
+  },
 };
 
 const enquirySlice = createSlice({
@@ -17,15 +23,44 @@ const enquirySlice = createSlice({
       };
     },
     setEnquiry: (state, action) => {
-      if (!state.enquiry.length) state.enquiry = action.payload;
+      state.enquiry = action.payload;
     },
+    setLoadingStatus: (state, action) => {
+      return {
+        ...state,
+        status: {
+          ...state.status,
+          loading: action.payload,
+        },
+      };
+    },
+    setErrorStatus: (state, action) => {
+      return {
+        ...state,
+        status: {
+          ...state.status,
+          error: true,
+          errorMsg: action.payload,
+        },
+      };
+    },
+    setFormSubmitted: (state, action) => {
+      return {
+        ...state,
+        formSubmitted: action.payload
+      }
+    }
   },
 });
 
-export const { addEnquiry, setEnquiry } = enquirySlice.actions;
+export const selectEnquiry = (state) => state.enquiry.enquiry;
+export const selectEnquiryStatus = (state) => state.enquiry.status;
+export const selectEnquiryFormSubmitted = (state) => state.enquiry.formSubmitted;
+
+export const { addEnquiry, setEnquiry, setErrorStatus, setLoadingStatus, setFormSubmitted } = enquirySlice.actions;
 
 export const getEnquiry = () => async (dispatch) => {
-  const resp = await fetch('http://localhost:5000/enquiry');
+  const resp = await fetch("http://localhost:5000/enquiry");
   const data = await resp.json();
   dispatch(setEnquiry(data));
 };

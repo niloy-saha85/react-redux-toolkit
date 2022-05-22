@@ -1,14 +1,20 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getEnquiry } from "../reducers/enquiry";
+import { selectEnquiry, selectEnquiryStatus } from "../reducers/enquiry";
+import { GET_ENQUIRY } from "../saga/types";
+
+let initial = true;
 
 const Enquiry = () => {
-  const enquiry = useSelector((state) => state.enquiry.enquiry);
-  console.log(enquiry);
+  const enquiry = useSelector(selectEnquiry);
+  const enquiryStatus = useSelector(selectEnquiryStatus);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getEnquiry());
+    if (initial) {
+      initial = false;
+      dispatch({type: GET_ENQUIRY});
+    }
   }, [dispatch]);
 
   return (
@@ -25,7 +31,21 @@ const Enquiry = () => {
               </tr>
             </thead>
             <tbody>
-              {enquiry && enquiry.length === 0 && (
+              {enquiryStatus.error && (
+                <tr>
+                  <th colSpan={4} style={{ textAlign: "center" }}>
+                    {enquiryStatus.errorMsg}
+                  </th>
+                </tr>
+              )}
+              {enquiryStatus.loading && (
+                <tr>
+                  <th colSpan={4} style={{ textAlign: "center" }}>
+                    Loading...
+                  </th>
+                </tr>
+              )}
+              {enquiry && enquiry.length === 0 && !enquiryStatus.error && (
                 <tr>
                   <th colSpan={4} style={{ textAlign: "center" }}>
                     No enquiry found.
